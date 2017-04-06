@@ -1,0 +1,39 @@
+{
+  "name": "fun-with-webhooks",
+  "version": "0.0.1",
+  "description": "Fun With Webhooks",
+  "main": "app/app.js",
+  "scripts": {
+    "start": "node index.js",
+    "start-dev": "webpack-dev-server --hot --inline --progress --colors"
+  },
+  "author": "sam",
+  "license": "MIT",
+  "dependencies": {
+    "babel-core": "^6.5.2",
+    "body-parser": "^1.15.2",
+    "connect": "^3.4.1",
+    "express": "^4.14.0",
+    "moment": "^2.14.1",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "react-router": "^2.6.0",
+    "request-promise": "^4.1.1",
+    "reqwest": "^2.0.5",
+    "tbg-flux-factory": "^0.2.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-loader": "^6.2.3",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.8.5",
+    "node-sass": "^3.8.0",
+    "react-hot-loader": "^1.3.0",
+    "sass-loader": "^4.0.0",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.12.14",
+    "webpack-dev-server": "^1.14.1"
+  }
+}
