@@ -30,14 +30,13 @@ class Demo extends Component {
     demo.removeChangeListener(this.handleStoreUpdate);
   }
 
-  componentDidMount() {
-    demo.Actions.getTWhooks()
-  }
-
   handleStoreUpdate() {
     this.setState(demo.getState(), (state) => {
-
     })
+  }
+
+  getProvider() {
+    return this.state.providers[ this.state.provider ] || {}
   }
 
   render() {
@@ -47,7 +46,7 @@ class Demo extends Component {
           <div className='demo'>
             <div className='pure-g'>
               <div className='pure-u-1 pure-u-md-1-2'>
-                <Create twhooks={this.state.twhooks} />
+                <Create loading={this.state.loading} provider={this.getProvider()} />
               </div>
               <div className='pure-u-1 pure-u-md-1-2'>
                 <Terminal />

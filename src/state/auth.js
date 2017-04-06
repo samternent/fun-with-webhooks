@@ -39,7 +39,7 @@ const authStore = createStore({
   actions: {
     server: {
       login({teamname, APIKey}) {
-        const baseURL = `http://${teamname}.teamwork.${window.dev ? 'dev' : 'com'}`;
+        const baseURL = `http${window.dev ? '' : 's'}://${teamname}.teamwork.${window.dev ? 'dev' : 'com'}`;
         const auth_token = new Buffer(APIKey + ":xxx").toString("base64");
 
         this.setState({ loading: true })

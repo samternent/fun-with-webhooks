@@ -4,38 +4,27 @@ import './styles/select-search';
 import React, {Component} from 'react';
 
 import LogoSVG from './LogoSVG';
-import Tags from './Tags';
-import SelectSearch from 'react-select-search';
+import Loader from './Loader';
+import CreateTeamwork from './CreateTeamwork';
 
 import {getStore} from 'tbg-flux-factory';
 const demo = getStore('demo');
 
-const Create = ({ twhooks }) => {
+const Create = ({ loading, provider }) => {
 
 
-  const onSelectChange = (hook) => {
-    if (hook.name.indexOf('TASK') < 0) return null
-    demo.setState({
-      hook
-    })
+  const setProvider = (provider) => {
+    demo.setState({ provider })
+
+    demo.Actions.getHooks(provider);
+    demo.Actions.getTags(provider);
   }
 
-
-  const renderTWhooksList = () => {
-    if (twhooks.length < 1) return null
-
-    const options = twhooks.map(({id, name}) => {
-      return { value: id, name }
-    })
-
-    return (
-      <SelectSearch
-        options={options}
-        onChange={onSelectChange}
-        placeholder="Select Action" />
-    )
+  const renderCreateOptions = () => {
+    if (provider.name === 'teamwork') {
+      return <CreateTeamwork hooks={provider.hooks} tags={provider.tags} loading={loading} />
+    }
   }
-
 
   return (
     <div className='create'>
@@ -43,16 +32,11 @@ const Create = ({ twhooks }) => {
         <span><i className='fa fa-bolt header__title--icon bolt' /></span>
       </div>
       <div className='select-app'>
-        <button className='app-btn btn-svg'>
+        <button className='app-btn btn-svg' onClick={setProvider.bind(this, 'teamwork')}>
           <LogoSVG />
         </button>
       </div>
-      <div>{ renderTWhooksList() }</div>
-      <div className='fancy'>
-        <span><i className='fa fa-tag header__title--icon tag' /></span>
-      </div>
-      <Tags />
-      <div className='btn'>Create</div>
+      { renderCreateOptions() }
     </div>
   );
 }
