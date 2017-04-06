@@ -46,7 +46,12 @@ class Demo extends Component {
           <div className='demo'>
             <div className='pure-g'>
               <div className='pure-u-1 pure-u-md-1-2'>
-                <Create loading={this.state.loading} provider={this.getProvider()} action={this.state.action} />
+                <Create
+                  loading={this.state.loading}
+                  provider={this.getProvider()}
+                  action={this.state.action}
+                  actions={this.state.actions}
+                />
               </div>
               <div className='pure-u-1 pure-u-md-1-2'>
                 <Terminal />

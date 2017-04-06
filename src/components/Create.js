@@ -10,7 +10,7 @@ import CreateTeamwork from './CreateTeamwork';
 import {getStore} from 'tbg-flux-factory';
 const demo = getStore('demo');
 
-const Create = ({ loading, action, provider }) => {
+const Create = ({ loading, action, provider, actions }) => {
 
 
   const setProvider = (provider) => {
@@ -25,7 +25,18 @@ const Create = ({ loading, action, provider }) => {
 
   const renderCreateOptions = () => {
     if (provider.name === 'teamwork') {
-      return <CreateTeamwork hooks={provider.hooks} tags={provider.tags} loading={loading} action={action} />
+      return (
+        <CreateTeamwork
+          hooks={provider.hooks}
+          tags={provider.tags}
+          loading={loading}
+          action={action}
+          actions={actions}
+        />
+      );
+    }
+    if (provider.name === 'github') {
+      return <div>Empty</div>
     }
   }
 
@@ -36,6 +47,7 @@ const Create = ({ loading, action, provider }) => {
       </div>
       <div className='select-app'>
         <button className='app-btn btn-svg' onClick={setProvider.bind(this, 'teamwork')}><LogoSVG /></button>
+        <button className='app-btn btn-fa' onClick={setProvider.bind(this, 'github')}><i className='fa fa-github' /></button>
       </div>
       { renderCreateOptions() }
     </div>

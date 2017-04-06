@@ -48,20 +48,32 @@ github.authenticate({
     token: config.githubToken
 });
 
+//
+// app.get('/test-github-issues', function (req, res) {
+//   var title = 'issue title';
+//
+//   github.issues.create({
+//     owner: 'samternent',
+//     repo: 'fun-with-webhooks',
+//     title: title,
+//   }, function () {
+//     res.sendStatus(200)
+//   })
+//
+// })
+//
+//
 
-app.get('/test-github-issues', function (req, res) {
-  var title = 'issue title';
 
-  github.issues.create({
-    owner: 'samternent',
-    repo: 'fun-with-webhooks',
-    title: title,
-  }, function () {
-    res.sendStatus(200)
-  })
 
+app.post('/set-action', function (req, res) {
+  var params = req.body;
+
+  // post data objet to mongo
+  // setup provider webhook
+
+  res.json({})
 })
-
 
 app.get('/*', function (req, res) {
   res.sendFile(__dirname + '/app/index.html');

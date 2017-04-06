@@ -1,6 +1,48 @@
 import {createStore, getStore} from 'tbg-flux-factory';
 import request from 'reqwest';
 
+const defaultData = {
+  loading: false,
+  hooks: {
+    teamwork: [],
+    github: []
+  },
+  actions: {
+    teamwork: [],
+    github: [
+      {
+        provider: 'github',
+        name: 'CREATE.ISSUE',
+        fields: {
+          title: '',
+          body: '',
+          labels: [],
+        }
+      }
+    ]
+  },
+  providers: {
+    teamwork: {
+      name: 'teamwork',
+      hooks: [],
+      tags: [],
+    },
+    github: {
+      name: 'github',
+      hooks: []
+    }
+  },
+  provider: null,
+  action: {
+    provider: null,
+    hook: null,
+    tags: [],
+    action: null,
+    actionProvider: null
+  }
+};
+
+
 var authStore = getStore('auth');
 
 function fetchTWhooks () {
@@ -33,33 +75,20 @@ function fetchTWtags () {
   })
 }
 
+function postAction (data) {
+  console.log(data)
+  return request({
+    url: '/set-action',
+    type: 'json',
+    method: 'post',
+    contentType: 'application/json',
+    data: JSON.stringify(data)
+  })
+}
+
 const demo = createStore({
   name: 'demo',
-  data: {
-    loading: false,
-    hooks: {
-      teamwork: [],
-      github: []
-    },
-    providers: {
-      teamwork: {
-        name: 'teamwork',
-        hooks: [],
-        tags: [],
-      },
-      github: {
-        name: 'github',
-        hooks: []
-      }
-    },
-    provider: null,
-    action: {
-      provider: null,
-      hook: null,
-      tags: [],
-      action: null
-    }
-  },
+  data: Object.assign({}, defaultData),
   actions: {
     server: {
       getHooks(provider) {
@@ -96,6 +125,20 @@ const demo = createStore({
             this.setState({ loading: false })
           })
         }
+      },
+
+      postAction() {
+        this.setState({ loading: true })
+
+        const {action} = this.getState()
+
+        postAction(action)
+        .then((resp) => {
+          this.setState(Object.assign({}, defaultData));
+        })
+        .always( () => {
+          this.setState({ loading: false })
+        })
       }
     },
 
@@ -116,6 +159,22 @@ const demo = createStore({
         const { action } = this.getState()
 
         action.hook = hook
+
+        this.setState({action: Object.assign({}, action) })
+      },
+
+      setActionProvider(provider) {
+        const { action } = this.getState()
+
+        action.actionProvider = provider
+
+        this.setState({action: Object.assign({}, action) })
+      },
+
+      setAction(actionType) {
+        const { action } = this.getState()
+
+        action.action = actionType
 
         this.setState({action: Object.assign({}, action) })
       }

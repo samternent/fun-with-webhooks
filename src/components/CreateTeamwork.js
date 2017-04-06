@@ -11,16 +11,22 @@ import SelectSearch from 'react-select-search';
 import {getStore} from 'tbg-flux-factory';
 const demo = getStore('demo');
 
-const CreateTeamwork = ({ hooks, loading, tags, action }) => {
+const CreateTeamwork = ({ hooks, loading, tags, action, actions }) => {
 
   const onSelectChange = (hook) => {
     demo.Actions.setHook(hook)
   }
 
-  const onCreateAction = () => {
-    const { action } = demo.getState()
+  const onSelectActionChange = ({ name }) => {
+    demo.Actions.setAction(name)
+  }
 
-    console.log(action)
+  const onCreateAction = () => {
+    demo.Actions.postAction()
+  }
+
+  const onSelectActionProvider = (provider) => {
+    demo.Actions.setActionProvider(provider)
   }
 
 
@@ -39,6 +45,28 @@ const CreateTeamwork = ({ hooks, loading, tags, action }) => {
       <SelectSearch
         options={options}
         onChange={onSelectChange}
+        placeholder="Select Webhook" />
+    )
+  }
+
+  const renderActiveActions = () => {
+    if (!action.actionProvider) return null
+
+    const actionOptions = actions[action.actionProvider]
+
+
+    if (actionOptions.length < 1) return null
+
+    const options = [];
+
+    actionOptions.forEach(({name}) => {
+      options.push({ value: name, name })
+    })
+
+    return (
+      <SelectSearch
+        options={options}
+        onChange={onSelectActionChange}
         placeholder="Select Action" />
     )
   }
@@ -56,9 +84,10 @@ const CreateTeamwork = ({ hooks, loading, tags, action }) => {
             <span><i className='fa fa-coffee header__title--icon' /></span>
           </div>
           <div className='select-app'>
-            <button className='app-btn btn-svg'><LogoSVG /></button>
-            <button className='app-btn btn-fa'><i className='fa fa-github' /></button>
+            <button className='app-btn btn-svg' onClick={onSelectActionProvider.bind(null, 'teamwork')}><LogoSVG /></button>
+            <button className='app-btn btn-fa' onClick={onSelectActionProvider.bind(null, 'github')}><i className='fa fa-github' /></button>
           </div>
+          <div>{ renderActiveActions() }</div>
           <div className='btn' onClick={ onCreateAction }>Create</div>
         </div>
       )}
