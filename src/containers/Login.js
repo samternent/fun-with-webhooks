@@ -59,7 +59,7 @@ class Login extends Component {
   render() {
     return (
       <div>
-        <Header title='Teamwork app starter' account={null} />
+        <Header title='Fun with Webhooks' account={null} />
           <div className='main-app'>
             {(this.state.loading) ? <Loader /> : (
               <form className="login-form">

@@ -39,7 +39,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Header title='Teamwork App Starter' account={this.state.account} />
+        <Header title='Fun with Webhooks' account={this.state.account} />
         {cloneElement(this.props.children, this.state)}
         <footer className='footer'></footer>
       </div>
