@@ -10,11 +10,14 @@ import CreateTeamwork from './CreateTeamwork';
 import {getStore} from 'tbg-flux-factory';
 const demo = getStore('demo');
 
-const Create = ({ loading, provider }) => {
+const Create = ({ loading, action, provider }) => {
 
 
   const setProvider = (provider) => {
-    demo.setState({ provider })
+    demo.setState({action: Object.assign({}, action, {
+      provider
+      })
+    })
 
     demo.Actions.getHooks(provider);
     demo.Actions.getTags(provider);

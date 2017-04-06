@@ -53,6 +53,12 @@ const demo = createStore({
       }
     },
     provider: null,
+    action: {
+      provider: null,
+      hook: null,
+      tags: [],
+      action: null
+    }
   },
   actions: {
     server: {
@@ -90,6 +96,14 @@ const demo = createStore({
             this.setState({ loading: false })
           })
         }
+      }
+    },
+
+    view: {
+      addTag(tag) {
+        const { action } = this.getState()
+        action.tags.push(tag)
+        this.setState({action: Object.assign({}, action) })
       }
     }
   }

@@ -7,10 +7,18 @@ const demo = getStore('demo');
 
 const Tags = ({ tags }) => {
 
+  const onSelectTags = (id) => {
+    demo.Actions.addTag(id)
+  }
+
   const renderTags = () => {
-    return tags.map((tag, i) => {
+    return tags.map(({name, id, color}) => {
       return (
-        <div key={`tag_${i}`} className='tag'>{tag.name}</div>
+        <div
+          style={{borderColor: color, color: color}}
+          key={`tag_${id}`}
+          onClick={onSelectTags.bind(null, id)}
+          className='tag'>{name}</div>
       );
     })
   }

@@ -16,12 +16,17 @@ const CreateTeamwork = ({ hooks, loading, tags }) => {
     demo.setState({ hook })
   }
 
+  const onCreateAction = () => {
+    const { action } = demo.getState()
+    console.log(action)
+  }
+
 
   const renderTWhooksList = () => {
     if (hooks.length < 1) return null
 
     const options = [];
-    console.log(tags)
+
     hooks.forEach(({id, name}) => {
       if (name.indexOf('TASK.') < 0) return null
 
@@ -42,10 +47,10 @@ const CreateTeamwork = ({ hooks, loading, tags }) => {
         <div className='create-teamwork'>
           <div>{ renderTWhooksList() }</div>
           <div className='fancy'>
-            <span><i className='fa fa-tag header__title--icon tag' /></span>
+            <span><i className='fa fa-tag header__title--icon' /></span>
           </div>
           <Tags tags={tags} />
-          <div className='btn'>Create</div>
+          <div className='btn' onClick={ onCreateAction }>Create</div>
         </div>
       )}
     </div>

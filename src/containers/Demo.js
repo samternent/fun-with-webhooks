@@ -36,7 +36,7 @@ class Demo extends Component {
   }
 
   getProvider() {
-    return this.state.providers[ this.state.provider ] || {}
+    return this.state.providers[ this.state.action.provider ] || {}
   }
 
   render() {
@@ -46,7 +46,7 @@ class Demo extends Component {
           <div className='demo'>
             <div className='pure-g'>
               <div className='pure-u-1 pure-u-md-1-2'>
-                <Create loading={this.state.loading} provider={this.getProvider()} />
+                <Create loading={this.state.loading} provider={this.getProvider()} action={this.state.action} />
               </div>
               <div className='pure-u-1 pure-u-md-1-2'>
                 <Terminal />
