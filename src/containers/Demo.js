@@ -1,9 +1,11 @@
-import './styles/home';
+import './styles/demo';
 
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 
 import Loader from '../components/Loader';
+import Terminal from '../components/Terminal';
+import Create from '../components/Create';
 
 class Home extends Component {
   constructor(props) {
@@ -17,6 +19,14 @@ class Home extends Component {
       <div className='main-app'>
         {(this.props.loading) ? <Loader /> : (
           <div className='demo'>
+            <div className='pure-g'>
+              <div className='pure-u-1 pure-u-md-1-2'>
+                <Create />
+              </div>
+              <div className='pure-u-1 pure-u-md-1-2'>
+                <Terminal />
+              </div>
+            </div>
           </div>
         )}
       </div>

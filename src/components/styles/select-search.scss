@@ -1,0 +1,76 @@
+.select-search-box {
+  margin: 20px auto;
+  position: relative;
+  max-width: 720px;
+}
+
+.select-search-box__select {
+    display: none;
+}
+
+.select-search-box__search {
+  box-sizing: border-box;
+  display: block;
+  border: 1px solid #eee;
+  text-align: center;
+  padding: 10px;
+  width: 100%;
+  font-size: 22px;
+  font-weight: 800;
+  border-radius: 4px;
+  outline: none;
+  background-color: #fff;
+  color: #333;
+  text-transform: uppercase;
+
+  &:focus {
+  }
+}
+
+.select-search-box__out {
+  border: 0;
+  width: 100%;
+  height: 40px;
+  background-color: transparent;
+  text-align: center;
+
+  option {
+    border-radius: 5px;
+    display: inline-block;
+    margin: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+}
+
+/** The list receives the modifier class "display" when the select has focus */
+.select-search-box__select--display {
+    display: block;
+    overflow: scroll;
+    z-index: 2;
+    border: 1px solid #ccc;
+}
+
+/** UL with the options */
+.select-search-box__options {
+  list-style-type: none;
+  background-color: white;
+}
+
+/** The option (LI), look at the state classes below */
+.select-search-box__option {
+  padding: 15px;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+/** When the option has been selected */
+.select-search-box__option--selected {
+  background-color: #ccc;
+}
+
+/** When the option is selected (when navigation with the arrow keys, up/down) */
+.select-search-box__option--hover, .select-search-box__option:hover {
+  background-color: #eee;
+}

@@ -1,0 +1,73 @@
+.create {
+  text-align: center;
+}
+
+.select-app {
+  display: inline-block;
+  width: auto;
+}
+
+.app-btn {
+  background-color: transparent;
+  border: 0;
+  font-size: 3em;
+  margin: 10px;
+  cursor: pointer;
+
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  height: 70px;
+  width: 70px;
+  float: left;
+
+  padding: 10px;
+
+  &.active {
+    border: 2px solid #687CE6;
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &.btn-svg {
+    svg {
+      width: 50px;
+    }
+  }
+  &.btn-fa {
+    i {
+      vertical-align: text-top;
+    }
+  }
+}
+
+
+.fancy {
+  margin: 10px 0;
+  color: rgba(#666, 0.9);
+  font-weight: 800;
+  font-size: 1.5em;
+}
+.fancy span {
+  display: inline-block;
+  position: relative;
+}
+.fancy span:before,
+.fancy span:after {
+  content: "";
+  position: absolute;
+  height: 1px;
+  border-top: 1px solid #eee;
+  top: 15px;
+  width: 100px;
+}
+.fancy span:before {
+  right: 100%;
+  margin-right: 15px;
+}
+.fancy span:after {
+  left: 100%;
+  margin-left: 15px;
+}
