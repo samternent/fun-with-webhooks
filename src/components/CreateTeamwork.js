@@ -14,7 +14,7 @@ const demo = getStore('demo');
 const CreateTeamwork = ({ hooks, loading, tags, action, actions }) => {
 
   const onSelectChange = (hook) => {
-    demo.Actions.setHook(hook)
+    demo.Actions.setHook(hook.name)
   }
 
   const onSelectActionChange = ({ name }) => {

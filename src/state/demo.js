@@ -76,6 +76,27 @@ function fetchTWtags () {
   })
 }
 
+function postTWhook (name) {
+  const { baseURL, auth_token } = authStore.getState()
+
+  return request({
+    url: `${baseURL}/webhooks.json`,
+    type: 'json',
+    method: 'post',
+    contentType: 'application/json',
+    headers: {
+      "Authorization": "BASIC " +  auth_token,
+    },
+    crossOrigin: true,
+    data: JSON.stringify({
+        webhook: {
+        event: name,
+        url: 'http://dth.teamworksam.ultrahook.com/dahook'
+      }
+    })
+  })
+}
+
 function postAction (data) {
   return request({
     url: '/action',
@@ -155,14 +176,17 @@ const demo = createStore({
 
         const {action} = this.getState()
 
-        postAction(action)
+        postTWhook(action.hook)
         .then((resp) => {
-          const { actionCards } = this.getState()
-          actionCards.push(action)
-          this.setState({actionCards});
-        })
-        .always( () => {
-          this.setState({ loading: false })
+          postAction(action)
+          .then(() => {
+            const { actionCards } = this.getState()
+            actionCards.push(action)
+            this.setState({actionCards});
+          })
+          .always( () => {
+            this.setState({ loading: false })
+          })
         })
       }
     },

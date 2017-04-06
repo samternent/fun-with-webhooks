@@ -19,6 +19,8 @@ app.listen(port, function() {
   console.log('Node app is running on port', port);
 });
 
+var baseURL = null;
+var auth_token = null;
 
 app.post('/api/setSession', function (req, res) {
   baseURL = req.body.baseURL;
@@ -64,7 +66,7 @@ mongoose.connect(config.db, {
 // define the schema for our model
 var actionSchema = mongoose.Schema({
     provider: String,
-    hook: Object,
+    hook: String,
     tags: Array,
     action: String,
     actionProvider: String
@@ -74,34 +76,35 @@ var actionSchema = mongoose.Schema({
 var Action = mongoose.model('Action', actionSchema);
 
 
-//
-// app.get('/test-github-issues', function (req, res) {
-//   var title = 'issue title';
-//
-//   github.issues.create({
-//     owner: 'samternent',
-//     repo: 'fun-with-webhooks',
-//     title: title,
-//   }, function () {
-//     res.sendStatus(200)
-//   })
-//
-// })
-//
-//
+var onActions = {
+  'github': {
+    'CREATE.ISSUE': function (data) {
+      github.issues.create({
+        owner: 'samternent',
+        repo: 'fun-with-webhooks',
+        title: data.title,
+        body: data.body
+      }, function () {
+
+        // emit github issue created
+      })
+    }
+  }
+}
+
+
 
 app.post('/action', function (req, res) {
   var params = req.body;
   var action = new Action(params);
-  // post data objet to mongo
   action.save(function (err) {
     if (err)
       return res.json({success: false, message: 'we cannay do it man'})
 
+    // socker emit that we created it ok!
+
     res.json({success: true, action: action});
   })
-
-  // setup provider webhook
 })
 
 
@@ -118,6 +121,49 @@ app.get('/actions', function (req, res) {
 
   })
 })
+
+
+app.post('/dahook', function (req, res) {
+  var twEvent = req.body.event.split('.');
+
+  Action.findOne({ hook: req.body.event }, function (err, action) {
+    if (err)
+      return res.json({success: false})
+
+    if (!action) {
+      return res.json({success: false})
+    } else {
+      request({
+          url: `${baseURL}/tasks/${req.body.objectId}.json`,
+          headers: {
+            "Authorization": "BASIC " + auth_token,
+          },
+        })
+        .then((resp) => {
+          var task = JSON.parse(resp)['todo-item']
+          var tagged = false;
+
+          task.tags.forEach((tag) => {
+            action.tags.forEach((t) => {
+              if (tag.name === t.name) {
+                tagged = true
+              }
+            })
+          })
+
+          if (tagged) {
+            onActions[action.actionProvider][action.action]({
+              title: `${task.content}`,
+              body: `${task.description} \n  [#${task.id}](${baseURL}/tasks/${task.id})`
+            })
+          }
+        })
+      res.sendStatus(200)
+    }
+
+  })
+})
+
 
 
 app.get('/reset', function (req, res) {

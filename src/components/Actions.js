@@ -9,7 +9,7 @@ const Actions = ({ actions }) => {
     return actions.map((action, i) => {
       return (
         <div key={`actionCard_${i}`} className='action-card'>
-          <i className='fa fa-bolt action-card--icon' /> {action.provider} - {action.hook.name} <br/>
+          <i className='fa fa-bolt action-card--icon' /> {action.provider} - {action.hook} <br/>
           <i className='fa fa-tag action-card--icon' /> <Tags tags={action.tags} /> <br/>
           <i className='fa fa-coffee action-card--icon' /> {action.actionProvider} - {action.action} <br/>
         </div>

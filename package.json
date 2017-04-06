@@ -24,6 +24,7 @@
     "react-dom": "^15.4.1",
     "react-router": "^2.6.0",
     "react-select-search": "^0.5.5",
+    "request": "^2.81.0",
     "request-promise": "^4.1.1",
     "reqwest": "^2.0.5",
     "tbg-flux-factory": "^0.2.0",

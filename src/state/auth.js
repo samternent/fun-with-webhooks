@@ -74,6 +74,8 @@ const authStore = createStore({
         authenticate(baseURL, auth_token)
         .then((resp) => {
           this.setState({ baseURL, auth_token, loggedIn: true, account: resp.account })
+
+          setServerSession(baseURL, auth_token)
         })
         .always(() => {
           this.setState({ loading: false })
