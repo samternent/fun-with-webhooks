@@ -48,6 +48,32 @@ github.authenticate({
     token: config.githubToken
 });
 
+
+var mongoose = require('mongoose');
+
+mongoose.connect(config.db, {
+  server: {
+    socketOptions: {
+      socketTimeoutMS: 0,
+      connectTimeoutMS: 0
+    }
+  }
+});
+
+
+// define the schema for our model
+var actionSchema = mongoose.Schema({
+    provider: String,
+    hook: Object,
+    tags: Array,
+    action: String,
+    actionProvider: String
+});
+
+// create the model for users and expose it to our app
+var Action = mongoose.model('Action', actionSchema);
+
+
 //
 // app.get('/test-github-issues', function (req, res) {
 //   var title = 'issue title';
@@ -64,16 +90,50 @@ github.authenticate({
 //
 //
 
-
-
-app.post('/set-action', function (req, res) {
+app.post('/action', function (req, res) {
   var params = req.body;
-
+  var action = new Action(params);
   // post data objet to mongo
-  // setup provider webhook
+  action.save(function (err) {
+    if (err)
+      return res.json({success: false, message: 'we cannay do it man'})
 
-  res.json({})
+    res.json({success: true, action: action});
+  })
+
+  // setup provider webhook
 })
+
+
+app.get('/actions', function (req, res) {
+  Action.find(function (err, actions) {
+    if (err)
+      return res.json({success: false, message: 'we cannay do it man'})
+
+    if (!actions) {
+      return res.json({success: false, message: 'no matching actions' });
+    } else {
+      return res.json({ success: true, actions: actions })
+    }
+
+  })
+})
+
+
+app.get('/reset', function (req, res) {
+  Action.deleteMany(function (err, actions) {
+    if (err)
+      return res.json({success: false, message: 'we cannay do it man'})
+
+    if (!actions) {
+      return res.json({success: false, message: 'no matching actions' });
+    } else {
+      return res.json({ success: true, actions: actions })
+    }
+
+  })
+})
+
 
 app.get('/*', function (req, res) {
   res.sendFile(__dirname + '/app/index.html');

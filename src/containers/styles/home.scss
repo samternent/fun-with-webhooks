@@ -1,0 +1,25 @@
+.slider {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  // background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.slider__wrapper {}
+.slider__view {
+  height: 500px;
+  width: 100%;
+  padding: 15px;
+
+  img {
+    width: 100%;
+  }
+}
+.slider__dots {}
+.slider__dot {}
+.slider__dot.is-active {}
+.slider__arrow__wrapper {}
+.slider__arrow__wrapper--right {}
+.slider__arrow__wrapper--left {}
+.slider__arrow {}
+.slider__arrow--right {}
+.slider__arrow--left {}

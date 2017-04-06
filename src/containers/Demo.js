@@ -30,6 +30,10 @@ class Demo extends Component {
     demo.removeChangeListener(this.handleStoreUpdate);
   }
 
+  componentDidMount() {
+    demo.Actions.getActions()
+  }
+
   handleStoreUpdate() {
     this.setState(demo.getState(), (state) => {
     })
@@ -55,7 +59,7 @@ class Demo extends Component {
               </div>
               <div className='pure-u-1 pure-u-md-1-2'>
                 <Terminal />
-                <Actions />
+                <Actions actions={this.state.actionCards} />
               </div>
             </div>
           </div>

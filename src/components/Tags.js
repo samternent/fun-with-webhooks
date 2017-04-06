@@ -12,6 +12,8 @@ const Tags = ({ tags, selectedTags }) => {
   }
 
   const isSelectedTag = (tag) => {
+    if (!selectedTags) return false;
+
     var isSelected = false
     selectedTags.forEach((sel) => {
       if (sel.id === tag.id) isSelected = true
@@ -25,7 +27,7 @@ const Tags = ({ tags, selectedTags }) => {
       return (
         <div
           style={{backgroundColor: isSelectedTag(tag) ? tag.color : 'white', borderColor: tag.color, color: isSelectedTag(tag) ? 'white': tag.color}}
-          key={`tag_${tag.id}`}
+          key={`tag_${tag.id}_${Date.now()}`}
           onClick={onSelectTags.bind(null, tag)}
           className='tag'>{tag.name}</div>
       );

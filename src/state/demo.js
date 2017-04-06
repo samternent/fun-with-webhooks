@@ -7,6 +7,7 @@ const defaultData = {
     teamwork: [],
     github: []
   },
+  actionCards: [],
   actions: {
     teamwork: [],
     github: [
@@ -76,13 +77,21 @@ function fetchTWtags () {
 }
 
 function postAction (data) {
-  console.log(data)
   return request({
-    url: '/set-action',
+    url: '/action',
     type: 'json',
     method: 'post',
     contentType: 'application/json',
     data: JSON.stringify(data)
+  })
+}
+
+function fetchActions () {
+  return request({
+    url: '/actions',
+    type: 'json',
+    method: 'get',
+    contentType: 'application/json'
   })
 }
 
@@ -93,8 +102,9 @@ const demo = createStore({
     server: {
       getHooks(provider) {
         this.setState({ loading: true })
+        var action = provider || this.getState().action.provider
 
-        if (provider === 'teamwork') {
+        if (action === 'teamwork') {
           fetchTWhooks()
           .then((resp) => {
             const { providers } = this.getState()
@@ -109,10 +119,23 @@ const demo = createStore({
         }
       },
 
-      getTags(provider) {
+      getActions() {
         this.setState({ loading: true })
 
-        if (provider === 'teamwork') {
+        fetchActions()
+        .then((resp) => {
+          this.setState({ actionCards: resp.actions })
+        })
+        .always( () => {
+          this.setState({ loading: false })
+        })
+      },
+
+      getTags(provider) {
+        this.setState({ loading: true })
+        var action = provider || this.getState().action.provider
+
+        if (action === 'teamwork') {
           fetchTWtags()
           .then((resp) => {
             const { providers } = this.getState()
@@ -134,7 +157,9 @@ const demo = createStore({
 
         postAction(action)
         .then((resp) => {
-          this.setState(Object.assign({}, defaultData));
+          const { actionCards } = this.getState()
+          actionCards.push(action)
+          this.setState({actionCards});
         })
         .always( () => {
           this.setState({ loading: false })

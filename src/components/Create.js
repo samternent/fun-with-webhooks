@@ -12,7 +12,6 @@ const demo = getStore('demo');
 
 const Create = ({ loading, action, provider, actions }) => {
 
-
   const setProvider = (provider) => {
     demo.setState({action: Object.assign({}, action, {
       provider
