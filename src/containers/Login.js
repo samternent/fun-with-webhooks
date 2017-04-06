@@ -7,7 +7,7 @@ import Loader from '../components/Loader'
 import Header from '../components/Header'
 
 import {getStore} from 'tbg-flux-factory';
-const authStore = getStore('auth');
+const auth = getStore('auth');
 
 class Login extends Component {
   constructor(props) {
@@ -16,25 +16,25 @@ class Login extends Component {
     this.state = Object.assign({
       // default state
       loading: false,
-    }, authStore.getState());
+    }, auth.getState());
 
     this.handleLogin = this.handleLogin.bind(this);
     this.handleStoreUpdate = this.handleStoreUpdate.bind(this);
   }
   componentWillMount() {
-    authStore.addChangeListener(this.handleStoreUpdate);
+    auth.addChangeListener(this.handleStoreUpdate);
   }
 
   componentWillUnmount() {
-    authStore.removeChangeListener(this.handleStoreUpdate);
+    auth.removeChangeListener(this.handleStoreUpdate);
   }
 
   componentDidMount() {
-    authStore.Actions.getSession()
+    auth.Actions.getSession()
   }
 
   handleStoreUpdate() {
-    this.setState(authStore.getState(), () => {
+    this.setState(auth.getState(), () => {
       if (!this.state.loggedIn) return false
       const { location } = this.props;
 
@@ -53,7 +53,7 @@ class Login extends Component {
     const teamname = this.refs.teamname.value;
     const APIKey = this.refs.key.value;
 
-    authStore.Actions.login({teamname, APIKey})
+    auth.Actions.login({teamname, APIKey})
   }
 
   render() {

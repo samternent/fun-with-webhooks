@@ -3,7 +3,10 @@ import {render} from "react-dom";
 import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 
 // Auth Store
-import authStore from './state/auth';
+import auth from './state/auth';
+
+// import all store to instanciate them
+import './state/demo';
 
 // Default Components
 import App from "../src/containers/App";
@@ -14,7 +17,7 @@ import Demo from '../src/containers/Demo';
 
 
 function requireAuth(nextState, replace) {
-  if (!authStore.getStateValue('loggedIn')) {
+  if (!auth.getStateValue('loggedIn')) {
     replace({
       pathname: '/login',
       state: { nextPathname: nextState.location.pathname }

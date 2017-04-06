@@ -8,11 +8,36 @@ import Terminal from '../components/Terminal';
 import Create from '../components/Create';
 import Actions from '../components/Actions';
 
-class Home extends Component {
+import flux from 'tbg-flux-factory';
+const demo = flux.getStore('demo');
+
+class Demo extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {}
+    this.state = Object.assign({}, demo.getState(), {
+      selectedApp: null,
+      showTask: false
+    })
+    this.handleStoreUpdate = this.handleStoreUpdate.bind(this);
+  }
+
+  componentWillMount() {
+    demo.addChangeListener(this.handleStoreUpdate);
+  }
+
+  componentWillUnmount() {
+    demo.removeChangeListener(this.handleStoreUpdate);
+  }
+
+  componentDidMount() {
+    demo.Actions.getTWhooks()
+  }
+
+  handleStoreUpdate() {
+    this.setState(demo.getState(), (state) => {
+
+    })
   }
 
   render() {
@@ -22,7 +47,7 @@ class Home extends Component {
           <div className='demo'>
             <div className='pure-g'>
               <div className='pure-u-1 pure-u-md-1-2'>
-                <Create />
+                <Create twhooks={this.state.twhooks} />
               </div>
               <div className='pure-u-1 pure-u-md-1-2'>
                 <Terminal />
@@ -36,4 +61,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default Demo;

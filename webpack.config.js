@@ -2,7 +2,6 @@ var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
-  devtool: 'source-map',
   context: __dirname + '/src',
   entry: {
     javascript: "./app.js"
@@ -12,7 +11,8 @@ module.exports = {
   },
   output: {
     filename: "app.js",
-    path: __dirname + "/app/src/"
+    path: __dirname + "/app/src/",
+    publicPath: '/'
   },
   resolve: {
       extensions: ['', '.js', '.scss'],
