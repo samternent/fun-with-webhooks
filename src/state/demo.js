@@ -102,7 +102,21 @@ const demo = createStore({
     view: {
       addTag(tag) {
         const { action } = this.getState()
-        action.tags.push(tag)
+
+        if (action.tags.indexOf(tag) > -1) {
+          action.tags.splice(action.tags.indexOf(tag), 1)
+        } else {
+          action.tags.push(tag)
+        }
+
+        this.setState({action: Object.assign({}, action) })
+      },
+
+      setHook(hook) {
+        const { action } = this.getState()
+
+        action.hook = hook
+
         this.setState({action: Object.assign({}, action) })
       }
     }

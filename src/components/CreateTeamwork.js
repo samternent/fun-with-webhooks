@@ -5,19 +5,21 @@ import React, {Component} from 'react';
 
 import Tags from './Tags';
 import Loader from './Loader';
+import LogoSVG from './LogoSVG';
 import SelectSearch from 'react-select-search';
 
 import {getStore} from 'tbg-flux-factory';
 const demo = getStore('demo');
 
-const CreateTeamwork = ({ hooks, loading, tags }) => {
+const CreateTeamwork = ({ hooks, loading, tags, action }) => {
 
   const onSelectChange = (hook) => {
-    demo.setState({ hook })
+    demo.Actions.setHook(hook)
   }
 
   const onCreateAction = () => {
     const { action } = demo.getState()
+
     console.log(action)
   }
 
@@ -49,7 +51,14 @@ const CreateTeamwork = ({ hooks, loading, tags }) => {
           <div className='fancy'>
             <span><i className='fa fa-tag header__title--icon' /></span>
           </div>
-          <Tags tags={tags} />
+          <Tags tags={tags} selectedTags={action.tags} />
+          <div className='fancy'>
+            <span><i className='fa fa-coffee header__title--icon' /></span>
+          </div>
+          <div className='select-app'>
+            <button className='app-btn btn-svg'><LogoSVG /></button>
+            <button className='app-btn btn-fa'><i className='fa fa-github' /></button>
+          </div>
           <div className='btn' onClick={ onCreateAction }>Create</div>
         </div>
       )}

@@ -25,7 +25,7 @@ const Create = ({ loading, action, provider }) => {
 
   const renderCreateOptions = () => {
     if (provider.name === 'teamwork') {
-      return <CreateTeamwork hooks={provider.hooks} tags={provider.tags} loading={loading} />
+      return <CreateTeamwork hooks={provider.hooks} tags={provider.tags} loading={loading} action={action} />
     }
   }
 
@@ -35,9 +35,7 @@ const Create = ({ loading, action, provider }) => {
         <span><i className='fa fa-bolt header__title--icon bolt' /></span>
       </div>
       <div className='select-app'>
-        <button className='app-btn btn-svg' onClick={setProvider.bind(this, 'teamwork')}>
-          <LogoSVG />
-        </button>
+        <button className='app-btn btn-svg' onClick={setProvider.bind(this, 'teamwork')}><LogoSVG /></button>
       </div>
       { renderCreateOptions() }
     </div>
