@@ -50,6 +50,27 @@ github.authenticate({
     token: config.githubToken
 });
 
+// var Twitter = require('twitter');
+// var client = new Twitter({
+//   consumer_key: config.twitterConsuerKey,
+//   consumer_secret: config.twitterConsuerSecret,
+//   access_token_key: config.twitterRequestToken,
+//   access_token_secret: config.twitterRequestTokenSecret
+// });
+//
+var Twit = require('twit')
+
+var T = new Twit({
+  consumer_key:         config.twitterConsumerKey,
+  consumer_secret:      config.twitterConsumerSecret,
+  access_token:         config.twitterAccessToken,
+  access_token_secret:  config.twitterAccessTokenSecret,
+  timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
+})
+
+
+
+
 
 var mongoose = require('mongoose');
 
@@ -78,15 +99,31 @@ var Action = mongoose.model('Action', actionSchema);
 
 var onActions = {
   'github': {
-    'CREATE.ISSUE': function (data) {
+    'CREATE.ISSUE': function (task) {
+
+      var title = `${task.content}`;
+      var body = `${task.description} \n  [#${task.id}](${baseURL}/tasks/${task.id})`;
+      var labels = [`#${task.id}`]
+
       github.issues.create({
         owner: 'samternent',
         repo: 'fun-with-webhooks',
-        title: data.title,
-        body: data.body
-      }, function () {
-
+        title: title,
+        body: body,
+        labels: labels
+      }, function (err, data) {
+        console.log(err)
         // emit github issue created
+      })
+    }
+  },
+  'twitter': {
+    'TWEET': function (task) {
+      var status = `FIXED - ${task.content} 🐶 #pugsnotbugs 🐞`;
+      T.post('statuses/update', { status: status }, function(err, data, response) {
+        if(err) console.log(err);
+
+        // socket emit about the tweet
       })
     }
   }
@@ -143,25 +180,47 @@ app.post('/dahook', function (req, res) {
           var task = JSON.parse(resp)['todo-item']
           var tagged = false;
 
-          task.tags.forEach((tag) => {
-            action.tags.forEach((t) => {
-              if (tag.name === t.name) {
-                tagged = true
-              }
+          if (task.tags) {
+            task.tags.forEach((tag) => {
+              action.tags.forEach((t) => {
+                if (tag.name === t.name) {
+                  tagged = true
+                }
+              })
             })
-          })
+          }
 
           if (tagged) {
-            onActions[action.actionProvider][action.action]({
-              title: `${task.content}`,
-              body: `${task.description} \n  [#${task.id}](${baseURL}/tasks/${task.id})`
-            })
+            onActions[action.actionProvider][action.action](task)
           }
         })
       res.sendStatus(200)
     }
 
   })
+})
+
+app.post('/githook', function (req, res) {
+  if (req.body.action !== 'closed') return res.sendStatus(200);
+
+  var label = req.body.issue.labels[0];
+  if (!label)
+    res.sendStatus(200)
+
+  if (label.name.indexOf('#') > -1) {
+    var taskId = label.name.substr(1);
+    request({
+        url: `${baseURL}/tasks/${taskId}/complete.json`,
+        method: 'put',
+        headers: {
+          "Authorization": "BASIC " + auth_token,
+        },
+      }).
+      then((resp) => {
+        res.sendStatus(200)
+      })
+
+  }
 })
 
 

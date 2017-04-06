@@ -86,6 +86,7 @@ const CreateTeamwork = ({ hooks, loading, tags, action, actions }) => {
           <div className='select-app'>
             <button className='app-btn btn-svg' onClick={onSelectActionProvider.bind(null, 'teamwork')}><LogoSVG /></button>
             <button className='app-btn btn-fa' onClick={onSelectActionProvider.bind(null, 'github')}><i className='fa fa-github' /></button>
+            <button className='app-btn btn-fa' onClick={onSelectActionProvider.bind(null, 'twitter')}><i className='fa fa-twitter' /></button>
           </div>
           <div>{ renderActiveActions() }</div>
           <div className='btn' onClick={ onCreateAction }>Create</div>

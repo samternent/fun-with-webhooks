@@ -5,7 +5,8 @@ const defaultData = {
   loading: false,
   hooks: {
     teamwork: [],
-    github: []
+    github: [],
+    twitter: []
   },
   actionCards: [],
   actions: {
@@ -13,12 +14,13 @@ const defaultData = {
     github: [
       {
         provider: 'github',
-        name: 'CREATE.ISSUE',
-        fields: {
-          title: '',
-          body: '',
-          labels: [],
-        }
+        name: 'CREATE.ISSUE'
+      }
+    ],
+    twitter: [
+      {
+        provider: 'twitter',
+        name: 'TWEET'
       }
     ]
   },
@@ -30,6 +32,10 @@ const defaultData = {
     },
     github: {
       name: 'github',
+      hooks: []
+    },
+    twitter: {
+      name: 'twitter',
       hooks: []
     }
   },
