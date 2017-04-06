@@ -6,6 +6,7 @@ import {Link} from 'react-router';
 import Loader from '../components/Loader';
 import Terminal from '../components/Terminal';
 import Create from '../components/Create';
+import Actions from '../components/Actions';
 
 class Home extends Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class Home extends Component {
               </div>
               <div className='pure-u-1 pure-u-md-1-2'>
                 <Terminal />
+                <Actions />
               </div>
             </div>
           </div>
