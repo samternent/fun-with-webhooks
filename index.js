@@ -4,6 +4,7 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var request = require('request-promise');
+var open =  require('open');
 
 app.use(bodyParser.json());       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
@@ -28,6 +29,23 @@ app.post('/api/setSession', function (req, res) {
   res.sendStatus(200);
 })
 
+const server = app.listen(4200, function(err) {
+  if (err) {
+    console.log(err);
+  } else {
+    open(`http://localhost:${4200}`);
+  }
+});
+
+const io = require('socket.io')(server);
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+});
 
 var config = require('./config.js');
 // win
@@ -49,14 +67,6 @@ github.authenticate({
     token: config.githubToken
 });
 
-// var Twitter = require('twitter');
-// var client = new Twitter({
-//   consumer_key: config.twitterConsuerKey,
-//   consumer_secret: config.twitterConsuerSecret,
-//   access_token_key: config.twitterRequestToken,
-//   access_token_secret: config.twitterRequestTokenSecret
-// });
-//
 var Twit = require('twit')
 
 var T = new Twit({
@@ -111,8 +121,7 @@ var onActions = {
         body: body,
         labels: labels
       }, function (err, data) {
-        console.log(err)
-        // emit github issue created
+        io.emit('action', { type: 'Github Issue Created', message: `${title} #${task.id}`, icon: 'coffee' });
       })
     }
   },
@@ -122,7 +131,7 @@ var onActions = {
       T.post('statuses/update', { status: status }, function(err, data, response) {
         if(err) console.log(err);
 
-        // socket emit about the tweet
+        io.emit('action', { type: 'Tweeted', message: data, icon: 'coffee' });
       })
     }
   }
@@ -137,7 +146,7 @@ app.post('/action', function (req, res) {
     if (err)
       return res.json({success: false, message: 'we cannay do it man'})
 
-    // socker emit that we created it ok!
+    io.emit('action', { type: `${action.provider} ${action.hook} Linked to`, message: `${action.actionProvider} ${action.action}`, icon: 'bolt' });
 
     res.json({success: true, action: action});
   })
@@ -160,8 +169,7 @@ app.get('/actions', function (req, res) {
 
 
 app.post('/dahook', function (req, res) {
-  var twEvent = req.body.event.split('.');
-
+  io.emit('action', { type: `Teamwork Action:`, message: req.body.event, icon: 'bolt' });
   Action.findOne({ hook: req.body.event }, function (err, action) {
     if (err)
       return res.json({success: false})
@@ -201,6 +209,7 @@ app.post('/dahook', function (req, res) {
 
 app.post('/githook', function (req, res) {
   if (req.body.action !== 'closed') return res.sendStatus(200);
+  if (!req.body.issue) return res.sendStatus(200);
 
   var label = req.body.issue.labels[0];
   if (!label)
@@ -208,6 +217,8 @@ app.post('/githook', function (req, res) {
 
   if (label.name.indexOf('#') > -1) {
     var taskId = label.name.substr(1);
+
+    io.emit('action', { type: `Github Issue Closed`, message: `ID: #${taskId}`, icon: 'bolt' });
     request({
         url: `${baseURL}/tasks/${taskId}/complete.json`,
         method: 'put',
@@ -216,6 +227,7 @@ app.post('/githook', function (req, res) {
         },
       }).
       then((resp) => {
+        io.emit('action', { type: `Teamwork Task Completed`, message: `ID: #${taskId}`, icon: 'coffee' });
         res.sendStatus(200)
       })
 

@@ -59,7 +59,7 @@ class Demo extends Component {
               </div>
               <div className='pure-u-1 pure-u-md-1-2'>
                 <Terminal />
-                <Actions actions={this.state.actionCards} />
+                <Actions actions={this.state.actionCards.slice(0)} />
               </div>
             </div>
           </div>
