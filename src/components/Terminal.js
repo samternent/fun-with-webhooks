@@ -1,6 +1,7 @@
 import './styles/terminal';
 
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom'
 
 import io from 'socket.io-client'
 
@@ -26,6 +27,19 @@ class Terminal extends Component {
     });
   }
 
+  scrollToBottom() {
+    const node = ReactDOM.findDOMNode(this.refs.bottom);
+    node.scrollTop = node.scrollHeight;
+  }
+
+  componentDidMount() {
+      this.scrollToBottom();
+  }
+
+  componentDidUpdate() {
+      this.scrollToBottom();
+  }
+
   renderMessages() {
     return this.state.messages.map((message, i) => {
       return (
@@ -37,8 +51,9 @@ class Terminal extends Component {
   }
 
   render() {
+    console.log(this.state.messages)
     return (
-      <div className='terminal'>
+      <div className='terminal' ref='bottom'>
         <div className='terminal-block' >
           <i className={`fa fa-exclamation action-card--icon`} />Let's have fun with <span className='on-app-name'>WEBHOOKS</span>
         </div>
