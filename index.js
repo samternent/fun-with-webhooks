@@ -129,9 +129,9 @@ var onActions = {
     'TWEET': function (task) {
       var status = `FIXED - ${task.content} 🐶 #pugsnotbugs 🐞`;
       T.post('statuses/update', { status: status }, function(err, data, response) {
-        if(err) console.log(err);
+        if(err) return
 
-        io.emit('action', { type: 'Tweeted', message: data, icon: 'coffee' });
+        io.emit('action', { type: 'Tweeted', message: data.text, icon: 'coffee' });
       })
     }
   }
