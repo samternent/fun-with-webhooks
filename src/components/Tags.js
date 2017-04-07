@@ -23,11 +23,11 @@ const Tags = ({ tags, selectedTags }) => {
   }
 
   const renderTags = () => {
-    return tags.map((tag) => {
+    return tags.map((tag, i) => {
       return (
         <div
           style={{backgroundColor: isSelectedTag(tag) ? tag.color : 'white', borderColor: tag.color, color: isSelectedTag(tag) ? 'white': tag.color}}
-          key={`tag_${tag.id}_${Date.now()}`}
+          key={`tag_${tag.id}_${new Date().getUTCMilliseconds()}`}
           onClick={onSelectTags.bind(null, tag)}
           className='tag'>{tag.name}</div>
       );

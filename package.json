@@ -27,6 +27,8 @@
     "request": "^2.81.0",
     "request-promise": "^4.1.1",
     "reqwest": "^2.0.5",
+    "socket.io": "^1.7.3",
+    "socket.io-client": "^1.7.3",
     "tbg-flux-factory": "^0.2.0",
     "tbg-react-slider": "^2.0.0",
     "twit": "^2.2.5"

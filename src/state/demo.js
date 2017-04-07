@@ -187,7 +187,7 @@ const demo = createStore({
           postAction(action)
           .then(() => {
             const { actionCards } = this.getState()
-            actionCards.push(action)
+            actionCards.push(Object.assign({}, action))
             this.setState({actionCards});
           })
           .always( () => {
@@ -200,12 +200,15 @@ const demo = createStore({
     view: {
       addTag(tag) {
         const { action } = this.getState()
+        const tags = action.tags.slice(0)
 
-        if (action.tags.indexOf(tag) > -1) {
-          action.tags.splice(action.tags.indexOf(tag), 1)
+        if (tags.indexOf(tag) > -1) {
+          tags.splice(tags.indexOf(tag), 1)
         } else {
-          action.tags.push(tag)
+          tags.push(tag)
         }
+
+        action.tags = tags
 
         this.setState({action: Object.assign({}, action) })
       },
